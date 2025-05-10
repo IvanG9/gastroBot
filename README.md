@@ -1,37 +1,36 @@
+# 🍳 GastroBot — Asistente de Cocina con Django + Tailwind CSS
 
-# 🧑‍🍳 Proyecto Gastrobot con Django + Tailwind CSS
-
-Este proyecto es una aplicación web de recetas con autenticación de usuarios y diseño moderno usando Tailwind CSS.
-
----
-
-## 🚀 Requisitos
-
-- Python 3.11 o superior
-- Node.js (versión LTS recomendada)
-- npm
-- Git (opcional)
+GastroBot es una aplicación web que permite a los usuarios registrarse, iniciar sesión, consultar recetas y utilizar un asistente de cocina con inteligencia artificial. Está construida con Django, Django Tailwind y aprovecha modernas tecnologías de frontend para una experiencia visual atractiva y fluida.
 
 ---
 
-## 🛠️ Instalación
+## ✅ Requisitos
 
-### 1. Clonar el repositorio (si aplica)
+- **Python** 3.11 o superior  
+- **Node.js** (versión LTS recomendada)  
+- **npm**  
+- **Git** (opcional, si clonas el repositorio)
+
+---
+
+## ⚙️ Instalación
+
+### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/proyecto-recetas.git
-cd proyecto-recetas
+git clone https://github.com/IvanG9/gastroBot
+cd gastrobot
 ```
 
-### 2. Crear y activar un entorno virtual
+### 2. Crear y activar el entorno virtual
 
 ```bash
 python -m venv env
 .\env\Scripts\Activate.ps1   # En Windows
-source env/bin/activate      # En Linux
+# source env/bin/activate   # En Linux o macOS
 ```
 
-### 3. Instalar dependencias
+### 3. Instalar dependencias del backend
 
 ```bash
 pip install -r requirements.txt
@@ -39,16 +38,15 @@ pip install -r requirements.txt
 
 ---
 
-## 🎨 Configurar Tailwind CSS
+## 🎨 Configuración de Tailwind CSS
 
-### 4. Inicializar e instalar Tailwind (si no está hecho) en este proyecto esta hecho
+### 4. Instalar dependencias de Node.js para Tailwind
 
 ```bash
-python manage.py tailwind init theme
 python manage.py tailwind install
 ```
 
-### 5. Iniciar el compilador de estilos (en una terminal aparte)
+### 5. Iniciar el compilador de Tailwind (en una terminal aparte)
 
 ```bash
 python manage.py tailwind start
@@ -56,7 +54,7 @@ python manage.py tailwind start
 
 ---
 
-## 🔧 Migraciones y base de datos
+## 🗄️ Base de Datos y Migraciones
 
 ```bash
 python manage.py migrate
@@ -64,7 +62,7 @@ python manage.py migrate
 
 ---
 
-## 🧪 Crear superusuario (opcional)
+## 👤 Crear un superusuario (opcional)
 
 ```bash
 python manage.py createsuperuser
@@ -72,17 +70,18 @@ python manage.py createsuperuser
 
 ---
 
-## 🖥️ Ejecutar el servidor
+## 🖥️ Ejecutar el servidor de desarrollo
 
 ```bash
 python manage.py runserver
 ```
 
-Visita: [http://127.0.0.1:8000](http://127.0.0.1:8000)
+Abre en el navegador:  
+📍 http://127.0.0.1:8000
 
 ---
 
-## 📦 Generar `requirements.txt` actualizado
+## 📦 Regenerar `requirements.txt` (si instalas nuevas dependencias)
 
 ```bash
 pip freeze > requirements.txt
@@ -90,15 +89,24 @@ pip freeze > requirements.txt
 
 ---
 
-## 📝 Notas
+## 📁 Estructura de Carpetas Sugerida
 
-- El archivo `base.html` ya incluye el CSS generado por Tailwind (`css/dist/styles.css`)
-- Los formularios están personalizados con filtros (`add_class`) definidos en `recetas/templatetags/form_filters.py`
-- Usa `tailwind==3.7.0` para evitar errores con Django
+```
+gastrobot/
+│
+├── core/            # Página de bienvenida, home
+├── usuarios/        # Registro, login, logout, perfiles
+├── recetas/         # Modelo y lógica de recetas
+├── asistente/       # Chatbot de cocina con IA
+├── theme/           # Tailwind CSS y configuración
+├── templates/       # Plantillas globales
+├── static/          # Archivos estáticos
+└── manage.py
+```
 
 ---
 
 ## ✨ Autor
 
-Proyecto desarrollado por **Iván Perales López**  
-Ciclo DAM – Desarrollo de Aplicaciones Multiplataforma
+Desarrollado por **Iván Perales López**  
+📚 Ciclo Formativo DAM — Desarrollo de Aplicaciones Multiplataforma
