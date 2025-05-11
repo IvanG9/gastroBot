@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Perfil de Usuario{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-white dark:bg-gray-900 py-12 px-4 flex justify-center">
+  <div class="bg-white dark:bg-gray-800 w-full max-w-2xl rounded-2xl shadow-xl p-8 space-y-8 border border-gray-200 dark:border-gray-700">
+
+    <!-- Header -->
+    <div class="text-center space-y-2">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Perfil de {{ perfil.nombre }}</h1>
+      <p class="text-sm text-gray-500 dark:text-gray-400">Tu información personal y configuración.</p>
+    </div>
+
+    <!-- Foto de Usuario -->
+    <div class="flex justify-center">
+      <div class="w-36 h-36 border-2 border-gray-300 dark:border-gray-600 rounded-full overflow-hidden shadow-md">
+        {% if perfil.imagen and perfil.imagen.name %}
+          <img src="{{ perfil.imagen.url }}" alt="Foto de perfil" class="w-full h-full object-cover">
+        {% else %}
+          <img src="/media/defaults/default_user.png" alt="Foto de perfil por defecto" class="w-full h-full object-cover">
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Información principal -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-800 dark:text-gray-100">
+      <div>
+        <label class="text-xs text-gray-500 dark:text-gray-400">Nombre</label>
+        <p class="mt-1 font-medium">{{ perfil.nombre|default:"-" }}</p>
+      </div>
+      <div>
+        <label class="text-xs text-gray-500 dark:text-gray-400">Apellidos</label>
+        <p class="mt-1 font-medium">{{ perfil.apellidos|default:"-" }}</p>
+      </div>
+      <div>
+        <label class="text-xs text-gray-500 dark:text-gray-400">Fecha de nacimiento</label>
+        <p class="mt-1 font-medium">{{ perfil.fecha_nacimiento|date:"d/m/Y"|default:"-" }}</p>
+      </div>
+      <div>
+        <label class="text-xs text-gray-500 dark:text-gray-400">País</label>
+        <p class="mt-1 font-medium">{{ perfil.pais|default:"-" }}</p>
+      </div>
+    </div>
+
+    <!-- Biografía -->
+    <div>
+      <label class="text-xs text-gray-500 dark:text-gray-400">Biografía</label>
+      <div class="mt-1 p-4 bg-gray-50 dark:bg-gray-700 rounded-md text-sm text-gray-700 dark:text-gray-100">
+       <p class="mt-1 font-medium"> {{ perfil.bio|default:"Sin biografía aún." }}</p>
+      </div>
+    </div>
+
+    <!-- Redes sociales -->
+    {% if perfil.twitter or perfil.linkedin or perfil.instagram %}
+    <div class="space-y-1">
+      <label class="text-xs text-gray-500 dark:text-gray-400">Redes Sociales</label>
+      <div class="flex flex-wrap gap-4 text-sm text-indigo-600 dark:text-indigo-400">
+        {% if perfil.twitter %}<a href="{{ perfil.twitter }}" target="_blank" class="hover:underline">@Twitter</a>{% endif %}
+        {% if perfil.linkedin %}<a href="{{ perfil.linkedin }}" target="_blank" class="hover:underline">@LinkedIn</a>{% endif %}
+        {% if perfil.instagram %}<a href="{{ perfil.instagram }}" target="_blank" class="hover:underline">@Instagram</a>{% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Estadísticas (Ejemplo) -->
+    <div class="grid grid-cols-3 text-center mt-6">
+      <div>
+        <p class="text-lg font-bold text-indigo-600 dark:text-indigo-400">24</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Publicaciones</p>
+      </div>
+      <div>
+        <p class="text-lg font-bold text-indigo-600 dark:text-indigo-400">134</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Seguidores</p>
+      </div>
+      <div>
+        <p class="text-lg font-bold text-indigo-600 dark:text-indigo-400">87</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Siguiendo</p>
+      </div>
+    </div>
+
+    <!-- Botón Editar -->
+    <div class="text-center">
+      <a href="{% url 'editar_perfil' %}" class="inline-block bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:bg-indigo-500">
+        Editar perfil
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

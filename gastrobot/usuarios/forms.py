@@ -2,10 +2,9 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
+from .models import Perfil
+from django.forms.widgets import DateInput
 
-from django import forms
-from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 
 class RegistroForm(forms.ModelForm):
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
@@ -45,4 +44,18 @@ class RegistroForm(forms.ModelForm):
 class LoginForm(AuthenticationForm):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
-    
+
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['imagen', 'bio', 'pais', 'fecha_nacimiento', 'nombre', 'apellidos']
+        widgets = {
+            'fecha_nacimiento': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Aquí aseguramos que el valor esté en formato HTML5 para input[type="date"]
+        if self.instance and self.instance.pk and self.instance.fecha_nacimiento:
+            self.initial['fecha_nacimiento'] = self.instance.fecha_nacimiento.strftime('%Y-%m-%d')

@@ -5,10 +5,10 @@
 {% block title %}Iniciar Sesión{% endblock %}
 
 {% block content %}
-<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 bg-gray-50 dark:bg-gray-900">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
     <img class="mx-auto h-10 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Tu App">
-    <h2 class="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">
+    <h2 class="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
       Inicia sesión en tu cuenta
     </h2>
   </div>
@@ -16,19 +16,25 @@
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
     <form method="POST" class="space-y-6">
       {% csrf_token %}
-      {{ form.non_field_errors }}
+      {% if form.non_field_errors %}
+        <ul class="text-sm text-red-600 dark:text-red-400">
+          {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
 
       <div>
-        <label for="username" class="block text-sm font-medium text-gray-900">Usuario</label>
+        <label for="username" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Usuario</label>
         <div class="mt-2">
-          {{ form.username|add_class:"block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm" }}
+          {{ form.username|add_class:"block w-full rounded-md bg-white dark:bg-gray-700 px-3 py-1.5 text-base text-gray-900 dark:text-white outline outline-1 outline-gray-300 dark:outline-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-300 focus:outline-2 focus:outline-indigo-600 sm:text-sm" }}
         </div>
       </div>
 
       <div>
-        <label for="password" class="block text-sm font-medium text-gray-900">Contraseña</label>
+        <label for="password" class="block text-sm font-medium text-gray-900 dark:text-gray-100">Contraseña</label>
         <div class="mt-2">
-          {{ form.password|add_class:"block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm" }}
+          {{ form.password|add_class:"block w-full rounded-md bg-white dark:bg-gray-700 px-3 py-1.5 text-base text-gray-900 dark:text-white outline outline-1 outline-gray-300 dark:outline-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-300 focus:outline-2 focus:outline-indigo-600 sm:text-sm" }}
         </div>
       </div>
 
@@ -39,9 +45,9 @@
       </div>
     </form>
 
-    <p class="mt-10 text-center text-sm text-gray-500">
+    <p class="mt-10 text-center text-sm text-gray-500 dark:text-gray-300">
       ¿No tienes cuenta?
-      <a href="{% url 'registro' %}" class="font-semibold text-indigo-600 hover:text-indigo-500">Regístrate aquí</a>
+      <a href="{% url 'registro' %}" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">Regístrate aquí</a>
     </p>
   </div>
 </div>

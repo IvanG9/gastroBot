@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'usuarios.context_processors.perfil_usuario',
             ],
         },
     },
@@ -135,3 +136,9 @@ INTERNAL_IPS = ['127.0.0.1']
 
 # Npm path para Windows
 NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_URL = '/usuarios/login/'

@@ -1,81 +1,64 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-gray-50 text-gray-900 font-sans">
+<html lang="es" class="h-full font-sans">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}GastroBot{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}" />
-    <link
-      rel="icon"
-      href="{% static 'img/favicon.ico' %}"
-      type="image/x-icon"
-    />
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
   </head>
-  <body class="h-full">
+  <body class="h-full bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
     <div class="min-h-full">
       <!-- Navbar -->
-      <nav class="bg-gray-800 shadow-md">
+      <nav class="bg-gray-800 dark:bg-gray-950 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex h-16 items-center justify-between">
             <!-- Logo + Nombre -->
             <div class="flex items-center space-x-3">
               <a href="">
-                <img
-                  class="h-8 w-8 rounded"
-                  src="{% static 'img/favicon.ico' %}"
-                  alt="GastroBot Logo"
-                />
+                <img class="h-8 w-8 rounded" src="{% static 'img/favicon.ico' %}" alt="GastroBot Logo" />
               </a>
-              <span class="text-gray-100 text-xl font-semibold tracking-wide"
-                >GastroBot</span
-              >
+              <span class="text-gray-100 text-xl font-semibold tracking-wide">GastroBot</span>
             </div>
 
             <!-- Enlaces -->
-            <div
-              class="hidden md:flex space-x-6 text-sm font-medium text-gray-300"
-            >
-              <a
-                href=""
-                class="hover:text-violet-400 transition"
-                >Dashboard</a
-              >
-              <a href="#" class="hover:text-violet-400 transition"
-                >Mis Recetas</a
-              >
+            <div class="hidden md:flex space-x-6 text-sm font-medium text-gray-300">
+              <a href="" class="hover:text-violet-400 transition">Dashboard</a>
+              <a href="#" class="hover:text-violet-400 transition">Mis Recetas</a>
               <a href="#" class="hover:text-violet-400 transition">Favoritos</a>
-              <a
-                href="{% url 'asistente' %}"
-                class="hover:text-violet-400 transition"
-                >Asistente</a
-              >
+              <a href="{% url 'asistente' %}" class="hover:text-violet-400 transition">Asistente</a>
             </div>
+
+            <!-- Botón de modo oscuro -->
+            <button id="dark-mode-toggle" title="Cambiar modo" class="text-sm px-3 py-1 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+              🌙 / ☀️
+            </button>
 
             <!-- Login/Registro -->
             <div class="flex items-center space-x-4 text-sm">
-              {% if user.is_authenticated %}
-              <img
-                class="h-8 w-8 rounded-full border border-gray-300"
-                src="https://i.pravatar.cc/40?img=2"
-                alt="Avatar"
-              />
+              {% if user.is_authenticated and perfil %}
+              <div class="relative">
+                <details class="relative">
+                  <summary class="list-none cursor-pointer flex items-center space-x-2">
+                    {% if perfil.imagen and perfil.imagen.name %}
+                      <img class="h-8 w-8 rounded-full border border-gray-300 object-cover" src="{{ perfil.imagen.url }}" alt="Avatar" />
+                    {% else %}
+                      <img class="h-8 w-8 rounded-full border border-gray-300 object-cover" src="/media/defaults/default_user.png" alt="Avatar" />
+                    {% endif %}
+                  </summary>
+                  <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border rounded-md shadow-lg z-50 text-sm text-gray-700 dark:text-gray-200">
+                    <a href="{% url 'perfil' %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Ver perfil</a>
+                    <a href="{% url 'editar_perfil' %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Editar perfil</a>
+                    <a href="{% url 'logout' %}" class="block px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">Cerrar sesión</a>
+                  </div>
+                </details>
+              </div>
+              {% elif user.is_authenticated and not perfil %}
+              {% elif user.is_authenticated %}
               {% else %}
-              <!-- Login como texto -->
-              <a
-                href="{% url 'login' %}"
-                class="text-gray-100 font-medium hover:text-violet-600 transition"
-              >
-                Iniciar sesión
-              </a>
-
-              <!-- Botón de registro morado -->
-              <a
-                href="{% url 'registro' %}"
-                class="bg-violet-600 text-white px-4 py-1.5 rounded-md font-medium shadow-sm hover:bg-violet-700 transition"
-              >
-                Registrate
-              </a>
+              <a href="{% url 'login' %}" class="text-gray-100 font-medium hover:text-violet-600 transition">Iniciar sesión</a>
+              <a href="{% url 'registro' %}" class="bg-violet-600 text-white px-4 py-1.5 rounded-md font-medium shadow-sm hover:bg-violet-700 transition">Regístrate</a>
               {% endif %}
             </div>
           </div>
@@ -83,9 +66,9 @@
       </nav>
 
       <!-- Header -->
-      <header class="bg-white shadow-sm">
+      <header class="bg-white dark:bg-gray-800 shadow-sm">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 class="text-3xl font-bold tracking-tight text-gray-800">
+          <h1 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
             {% block header %}{% endblock %}
           </h1>
         </div>
@@ -98,5 +81,21 @@
         </div>
       </main>
     </div>
+
+    <!-- Script para cambiar modo -->
+    <script>
+      // Restaurar modo al cargar
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      // Toggle botón
+      document.getElementById('dark-mode-toggle')?.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      });
+    </script>
   </body>
 </html>

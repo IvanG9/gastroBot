@@ -25,9 +25,15 @@ cd gastrobot
 ### 2. Crear y activar el entorno virtual
 
 ```bash
+# Crear entorno virtual
 python -m venv env
-.\env\Scripts\Activate.ps1   # En Windows
-# source env/bin/activate   # En Linux o macOS
+# Activar entorno virtual 
+
+# Cambiar política de ejecución
+Set-ExecutionPolicy RemoteSigned
+
+.\env\Scripts\Activate.ps1  # En Windows
+source env/bin/activate     # En Linux o macOS
 ```
 
 ### 3. Instalar dependencias del backend
