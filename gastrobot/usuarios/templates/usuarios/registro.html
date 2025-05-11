@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_filters %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <img
+      class="mx-auto h-10 w-auto"
+      src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+      alt="Tu App"
+    />
+    <h2 class="mt-6 text-center text-2xl font-bold tracking-tight text-gray-900">
+      Crea tu cuenta
+    </h2>
+  </div>
+
+  <div class="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form method="POST" class="space-y-6">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="text-sm text-red-600">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <!-- Username -->
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-900">Nombre de usuario</label>
+        {{ form.username|add_class:"block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" }}
+        {% for error in form.username.errors %}
+          <p class="text-sm text-red-600">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-900">Correo electrónico</label>
+        {{ form.email|add_class:"block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" }}
+        {% for error in form.email.errors %}
+          <p class="text-sm text-red-600">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Password 1 -->
+      <div>
+        <label for="password1" class="block text-sm font-medium text-gray-900">Contraseña</label>
+        {{ form.password1|add_class:"block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" }}
+        {% for error in form.password1.errors %}
+          <p class="text-sm text-red-600">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Password 2 -->
+      <div>
+        <label for="password2" class="block text-sm font-medium text-gray-900">Repetir contraseña</label>
+        {{ form.password2|add_class:"block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" }}
+        {% for error in form.password2.errors %}
+          <p class="text-sm text-red-600">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Submit Button -->
+      <div>
+        <button
+          type="submit"
+          class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-white font-semibold shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Registrarse
+        </button>
+      </div>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-gray-600">
+      ¿Ya tienes cuenta?
+      <a href="{% url 'login' %}" class="font-semibold text-indigo-600 hover:text-indigo-500">
+        Inicia sesión
+      </a>
+    </p>
+  </div>
+</div>
+{% endblock %}

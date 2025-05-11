@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-gray-50 text-gray-900 font-sans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}GastroBot{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}" />
+    <link
+      rel="icon"
+      href="{% static 'img/favicon.ico' %}"
+      type="image/x-icon"
+    />
+  </head>
+  <body class="h-full">
+    <div class="min-h-full">
+      <!-- Navbar -->
+      <nav class="bg-gray-800 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex h-16 items-center justify-between">
+            <!-- Logo + Nombre -->
+            <div class="flex items-center space-x-3">
+              <a href="">
+                <img
+                  class="h-8 w-8 rounded"
+                  src="{% static 'img/favicon.ico' %}"
+                  alt="GastroBot Logo"
+                />
+              </a>
+              <span class="text-gray-100 text-xl font-semibold tracking-wide"
+                >GastroBot</span
+              >
+            </div>
+
+            <!-- Enlaces -->
+            <div
+              class="hidden md:flex space-x-6 text-sm font-medium text-gray-300"
+            >
+              <a
+                href=""
+                class="hover:text-violet-400 transition"
+                >Dashboard</a
+              >
+              <a href="#" class="hover:text-violet-400 transition"
+                >Mis Recetas</a
+              >
+              <a href="#" class="hover:text-violet-400 transition">Favoritos</a>
+              <a
+                href="{% url 'asistente' %}"
+                class="hover:text-violet-400 transition"
+                >Asistente</a
+              >
+            </div>
+
+            <!-- Login/Registro -->
+            <div class="flex items-center space-x-4 text-sm">
+              {% if user.is_authenticated %}
+              <img
+                class="h-8 w-8 rounded-full border border-gray-300"
+                src="https://i.pravatar.cc/40?img=2"
+                alt="Avatar"
+              />
+              {% else %}
+              <!-- Login como texto -->
+              <a
+                href="{% url 'login' %}"
+                class="text-gray-100 font-medium hover:text-violet-600 transition"
+              >
+                Iniciar sesión
+              </a>
+
+              <!-- Botón de registro morado -->
+              <a
+                href="{% url 'registro' %}"
+                class="bg-violet-600 text-white px-4 py-1.5 rounded-md font-medium shadow-sm hover:bg-violet-700 transition"
+              >
+                Registrate
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Header -->
+      <header class="bg-white shadow-sm">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 class="text-3xl font-bold tracking-tight text-gray-800">
+            {% block header %}{% endblock %}
+          </h1>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main>
+        <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 space-y-6">
+          {% block content %}{% endblock %}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
