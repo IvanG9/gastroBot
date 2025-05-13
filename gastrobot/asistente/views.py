@@ -7,4 +7,3 @@ def asistente_view(request):
         mensaje = request.POST.get('message', '')
         response = ask_groq(mensaje)
     return render(request, 'asistente/asistente.html', {'response': response})
-

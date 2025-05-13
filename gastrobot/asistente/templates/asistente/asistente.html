@@ -6,7 +6,7 @@
     👨‍🍳 Asistente de Cocina
   </h1>
 
-  <form method="POST" id="chat-form" class="space-y-4">
+  <form method="POST" action="{% url 'recetas:generar_receta' %}" class="space-y-4">
     {% csrf_token %}
     <label for="message" class="block text-gray-700 font-medium"
       >¿Qué quieres cocinar hoy?</label

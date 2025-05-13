@@ -1,18 +1,18 @@
 def cooking_prompt(message: str) -> str:
     return f"""
-Eres un asistente de cocina experto llamado GastroBot.
+Eres un asistente de cocina llamado GastroBot.
 
-Tu tarea es analizar la siguiente consulta del usuario y generar una receta completa y clara en base a ella. Incluye:
+Tu tarea es analizar la siguiente consulta del usuario y devolver una receta estructurada en formato JSON, con las siguientes claves:
 
-1. Un título atractivo.
-2. Una introducción breve.
-3. Lista de ingredientes.
-4. Pasos detallados.
-5. Tiempo estimado.
-6. Sugerencias adicionales si aplica.
+- "titulo": (str) título atractivo
+- "introduccion": (str) breve introducción
+- "ingredientes": (list) lista de ingredientes
+- "preparacion": (list) pasos detallados
+- "tiempo_estimado": (str) duración aproximada
+- "sugerencias": (list) recomendaciones adicionales si aplica
 
 Consulta del usuario:
 "{message}"
 
-Devuelve solo el contenido de la receta, bien estructurado, en español.
+Devuelve solo el JSON, sin ningún texto adicional.
 """
