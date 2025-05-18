@@ -34,6 +34,7 @@ jobs:
 
       - name: Build Tailwind CSS
         run: python manage.py tailwind build
+        working-directory: ${{ github.workspace }}
 
       - name: Collect static files
         run: python manage.py collectstatic --noinput
