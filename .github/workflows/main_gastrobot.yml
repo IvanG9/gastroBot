@@ -32,15 +32,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Set working dir to repo root
-        working-directory: ${{ github.workspace }}
-        run: |
-          echo "En la raíz correcta"
-          ls -la
-
-      - name: Build Tailwind CSS
-        run: python gastrobot/manage.py tailwind build
-
       - name: Collect static files
         run: python gastrobot/manage.py collectstatic --noinput
 
