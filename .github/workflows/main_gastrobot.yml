@@ -24,6 +24,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Build Tailwind CSS
+        run: python manage.py tailwind build
+
       - name: Create and start virtual environment
         run: |
           python -m venv venv
