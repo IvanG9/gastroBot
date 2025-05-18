@@ -35,6 +35,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: 📂 Mostrar estructura de carpetas antes de compilar Tailwind
+        run: |
+          echo "Directorio actual: $(pwd)"
+          echo "Contenido actual:"
+          ls -la
+          echo "Buscando manage.py:"
+          find . -name manage.py
+
       - name: Build Tailwind CSS
         run: python manage.py tailwind build
         working-directory: ${{ github.workspace }}
