@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Mis Recetas</h1>
+
+  {% if recetas %}
+    <ul class="space-y-4">
+      {% for receta in recetas %}
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 rounded-xl flex space-x-4 shadow-sm">
+          {% if receta.imagen %}
+            <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="w-40 h-40 object-cover rounded-lg shadow">
+          {% endif %}
+
+          <div>
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">{{ receta.titulo }}</h2>
+            <p class="text-gray-700 dark:text-gray-300">{{ receta.descripcion }}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              <strong>Tiempo de preparación:</strong> {{ receta.tiempo_preparacion }}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Creada el {{ receta.fecha_creacion|date:"d/m/Y H:i" }}</p>
+            <a href="{% url 'recetas:detalle_receta_guardada' receta.id %}" class="text-blue-600 dark:text-blue-400 hover:underline mt-2 inline-block">
+              Ver receta
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-gray-600 dark:text-gray-300">No has creado ninguna receta aún.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es" class="h-full font-sans">
+<html lang="es" class="h-full font-sans dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,40 +11,42 @@
   <body class="h-full bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
     <div class="min-h-full">
       <!-- Navbar -->
-      <nav class="bg-gray-800 dark:bg-gray-950 shadow-md">
+      <nav class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex h-16 items-center justify-between">
             <!-- Logo + Nombre -->
             <div class="flex items-center space-x-3">
-              <a href="">
+              <a href="/">
                 <img class="h-8 w-8 rounded" src="{% static 'img/favicon.ico' %}" alt="GastroBot Logo" />
               </a>
-              <span class="text-gray-100 text-xl font-semibold tracking-wide">GastroBot</span>
+              <span class="text-gray-900 dark:text-gray-100 text-xl font-semibold tracking-wide">GastroBot</span>
             </div>
 
             <!-- Enlaces -->
-            <div class="hidden md:flex space-x-6 text-sm font-medium text-gray-300">
-              <a href="" class="hover:text-violet-400 transition">Dashboard</a>
-              <a href="#" class="hover:text-violet-400 transition">Mis Recetas</a>
-              <a href="#" class="hover:text-violet-400 transition">Favoritos</a>
-              <a href="{% url 'asistente' %}" class="hover:text-violet-400 transition">Asistente</a>
+            <div class="hidden md:flex space-x-6 text-sm font-medium">
+              <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">Dashboard</a>
+              <a href="{% url 'recetas:mis_recetas' %}" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">Mis Recetas</a>
+              <a href="{% url 'recetas:favoritos' %}" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">⭐ Favoritos</a>
+              <a href="{% url 'asistente' %}" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">Asistente</a>
+              <a href="{% url 'recetas:explorar_recetas' %}" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">🌍 Explorar</a>
             </div>
 
             <!-- Botón de modo oscuro -->
-            <button id="dark-mode-toggle" title="Cambiar modo" class="text-sm px-3 py-1 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-              🌙 / ☀️
+            <button id="dark-mode-toggle" title="Cambiar modo"
+              class="text-sm px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+              <span id="dark-mode-icon">🌙</span>
             </button>
 
-            <!-- Login/Registro -->
+            <!-- Login/Usuario -->
             <div class="flex items-center space-x-4 text-sm">
               {% if user.is_authenticated and perfil %}
               <div class="relative">
                 <details class="relative">
                   <summary class="list-none cursor-pointer flex items-center space-x-2">
                     {% if perfil.imagen and perfil.imagen.name %}
-                      <img class="h-8 w-8 rounded-full border border-gray-300 object-cover" src="{{ perfil.imagen.url }}" alt="Avatar" />
+                    <img class="h-8 w-8 rounded-full border border-gray-300 object-cover" src="{{ perfil.imagen.url }}" alt="Avatar" />
                     {% else %}
-                      <img class="h-8 w-8 rounded-full border border-gray-300 object-cover" src="/media/defaults/default_user.png" alt="Avatar" />
+                    <img class="h-8 w-8 rounded-full border border-gray-300 object-cover" src="/media/defaults/default_user.png" alt="Avatar" />
                     {% endif %}
                   </summary>
                   <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border rounded-md shadow-lg z-50 text-sm text-gray-700 dark:text-gray-200">
@@ -54,10 +56,8 @@
                   </div>
                 </details>
               </div>
-              {% elif user.is_authenticated and not perfil %}
-              {% elif user.is_authenticated %}
               {% else %}
-              <a href="{% url 'login' %}" class="text-gray-100 font-medium hover:text-violet-600 transition">Iniciar sesión</a>
+              <a href="{% url 'login' %}" class="text-gray-700 dark:text-gray-100 font-medium hover:text-violet-600 dark:hover:text-violet-400 transition">Iniciar sesión</a>
               <a href="{% url 'registro' %}" class="bg-violet-600 text-white px-4 py-1.5 rounded-md font-medium shadow-sm hover:bg-violet-700 transition">Regístrate</a>
               {% endif %}
             </div>
@@ -65,36 +65,45 @@
         </div>
       </nav>
 
-      <!-- Header -->
-      <header class="bg-white dark:bg-gray-800 shadow-sm">
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
-            {% block header %}{% endblock %}
-          </h1>
-        </div>
-      </header>
+      <!-- Header 
+        <header class="bg-white dark:bg-gray-800 shadow-sm">
+          <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
+              {% block header %}{% endblock %}
+            </h1>
+          </div>
+        </header>
+      -->
 
       <!-- Main Content -->
       <main>
         <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 space-y-6">
-           {% block content %}{% endblock %}
+          {% block content %}{% endblock %}
         </div>
       </main>
     </div>
 
-    <!-- Script para cambiar modo -->
+    <!-- Script modo oscuro -->
     <script>
-      // Restaurar modo al cargar
+      const htmlEl = document.documentElement;
+      const toggleBtn = document.getElementById('dark-mode-toggle');
+      const iconEl = document.getElementById('dark-mode-icon');
+
+      // Inicial
       if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
+        htmlEl.classList.add('dark');
+        if (iconEl) iconEl.textContent = '☀️';
       } else {
-        document.documentElement.classList.remove('dark');
+        htmlEl.classList.remove('dark');
+        if (iconEl) iconEl.textContent = '🌙';
       }
 
-      // Toggle botón
-      document.getElementById('dark-mode-toggle')?.addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      // Cambio
+      toggleBtn?.addEventListener('click', () => {
+        htmlEl.classList.toggle('dark');
+        const isDark = htmlEl.classList.contains('dark');
+        localStorage.theme = isDark ? 'dark' : 'light';
+        if (iconEl) iconEl.textContent = isDark ? '☀️' : '🌙';
       });
     </script>
   </body>

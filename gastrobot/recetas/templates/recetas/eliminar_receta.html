@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-red-600 mb-6">¿Eliminar esta receta?</h1>
+
+    <p class="mb-4">Título: <strong>{{ receta.titulo }}</strong></p>
+
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Confirmar eliminación</button>
+      <a href="{% url 'recetas:detalle_receta_guardada' receta.id %}" class="ml-4 text-blue-600 hover:underline">Cancelar</a>
+    </form>
+  </div>
+{% endblock %}

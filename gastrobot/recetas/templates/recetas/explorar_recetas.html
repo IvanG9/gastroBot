@@ -1,0 +1,24 @@
+<!-- recetas/explorar.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mx-auto py-8">
+  <h1 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">🍽️ Recetas de la Comunidad</h1>
+
+  {% if recetas %}
+    <div class="grid md:grid-cols-3 gap-6">
+      {% for receta in recetas %}
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
+          {% if receta.imagen %}
+            <img src="{{ receta.imagen.url }}" class="rounded mb-2 w-full h-40 object-cover" />
+          {% endif %}
+          <h2 class="font-semibold text-lg text-gray-900 dark:text-white">{{ receta.titulo }}</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-300">{{ receta.descripcion|truncatewords:20 }}</p>
+          <a href="{% url 'recetas:detalle_receta_guardada' receta.id %}" class="text-blue-600 dark:text-blue-400 hover:underline mt-2 inline-block">Ver receta</a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-gray-600 dark:text-gray-300">Aún no hay recetas públicas.</p>
+  {% endif %}
+</div>
+{% endblock %}

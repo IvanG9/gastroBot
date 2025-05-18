@@ -1,67 +1,85 @@
 {% extends 'base.html' %}
 {% block title %}{{ receta.titulo }} | GastroBot{% endblock %}
 
-{% block header %}
-{{ receta.titulo }}
-{% endblock %}
-
 {% block content %}
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 py-8 px-4">
+  <div class="container mx-auto">
+    <div class="grid md:grid-cols-3 gap-6">
 
-<div class="min-h-screen bg-white dark:bg-gray-900 py-12 px-4 flex justify-center">
-  <div class="bg-white dark:bg-gray-800 w-full max-w-2xl rounded-2xl shadow-xl p-8 space-y-8 border border-gray-200 dark:border-gray-700">
+      <!-- 📷 Imagen + Información -->
+      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 flex flex-col items-center">
+        {% if receta.imagen_url %}
+          <img src="{{ receta.imagen_url }}" alt="{{ receta.titulo }}" class="rounded-md mb-4 w-full h-auto object-cover shadow" />
+        {% elif receta.imagen %}
+          <img src="{{ receta.imagen.url }}" alt="{{ receta.titulo }}" class="rounded-md mb-4 w-full h-auto object-cover shadow" />
+        {% else %}
+          <img src="/media/defaults/default_recipe.png" alt="Imagen por defecto" class="rounded-md mb-4 w-full h-auto object-cover shadow" />
+        {% endif %}
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-800 dark:text-gray-100">
-      <div class="flex justify-center">
-    <div class="w-50 h-50 border-2 border-gray-300 dark:border-gray-600 overflow-hidden shadow-md">
-      {% if receta.imagen %}
-        <img src="{{ receta.imagen.url }}" alt="Imagen de la receta" class="w-full h-full object-cover">
-      {% else %}
-        <img src="/media/defaults/default_recipe.png" class="w-full h-full object-cover">
-      {% endif %}
+        <h1 class="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">
+          {{ receta.titulo }}
+        </h1>
+        <p class="text-center text-gray-700 dark:text-gray-300 mb-2">{{ receta.introduccion }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Tiempo: {{ receta.tiempo_estimado }} minutos</p>
+
+        <form method="POST" action="{% url 'recetas:guardar_receta' %}" class="mt-6 w-full text-center">
+          {% csrf_token %}
+          <input type="hidden" name="titulo" value="{{ receta.titulo }}">
+          <input type="hidden" name="descripcion" value="{{ receta.introduccion }}">
+          <input type="hidden" name="ingredientes" value="{{ receta.ingredientes|join:';' }}">
+          <input type="hidden" name="pasos" value="{{ receta.preparacion|join:';' }}">
+          <input type="hidden" name="tiempo_preparacion" value="{{ receta.tiempo_estimado }} minutos">
+          <input type="hidden" name="imagen_url" value="{{ receta.imagen_url }}">
+          <button type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow">
+            💾 Guardar Receta
+          </button>
+        </form>
+      </div>
+
+      <!-- 🧂 Ingredientes -->
+      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
+        <h2 class="text-lg font-semibold text-purple-700 dark:text-purple-400 mb-4 flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M4 3a1 1 0 011-1h10a1 1 0 011 1v14l-6-3-6 3V3z" />
+          </svg>
+          Ingredientes
+        </h2>
+        <ul class="space-y-2">
+          {% for item in receta.ingredientes %}
+          <li class="flex items-start">
+            <input type="checkbox" class="mt-1 mr-2 accent-purple-600" />
+            <span>{{ item }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- 👨‍🍳 Pasos -->
+      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
+        <h2 class="text-lg font-semibold text-orange-700 dark:text-orange-400 mb-4 flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 3a1 1 0 01.894.553l5 10A1 1 0 0115 15H5a1 1 0 01-.894-1.447l5-10A1 1 0 0110 3z"/>
+          </svg>
+          Pasos
+        </h2>
+        <ul class="space-y-4">
+          {% for paso in receta.preparacion %}
+          <li class="flex items-start">
+            <input type="checkbox" class="mt-1 mr-2 accent-orange-600" />
+            <span><strong>Paso {{ forloop.counter }}:</strong> {{ paso }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- 🔙 Botón volver -->
+    <div class="text-center mt-8">
+      <a href="{% url 'recetas:mis_recetas' %}" class="text-blue-600 hover:underline">
+        ← Volver a Mis Recetas
+      </a>
     </div>
   </div>
-
-  <h1 class="text-2xl font-bold text-gray-900 dark:text-white mt-4">{{ receta.titulo }}</h1>
-  <p class="text-sm text-gray-500 dark:text-gray-400">{{ receta.introduccion }}</p>
-  <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Tiempo : {{ receta.tiempo_estimado }} minutos</p>
-  </div>
 </div>
-
-
-
-
-<div class="max-w-6xl mx-auto p-6">
-  <!-- CONTENEDOR GRID -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-    <!-- INGREDIENTES -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-      <h2 class="text-xl font-semibold text-indigo-600 dark:text-indigo-400 mb-4">🧂 Ingredientes</h2>
-      <ul class="space-y-3">
-        {% for item in receta.ingredientes %}
-        <li class="flex items-start space-x-2">
-          <input type="checkbox" class="h-4 w-4 mt-1 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600" />
-          <span class="text-gray-800 dark:text-gray-100">{{ item }}</span>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <!-- PASOS -->
-   <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-  <h2 class="text-xl font-semibold text-indigo-600 dark:text-indigo-400 mb-4">👨‍🍳 Pasos</h2>
-  <ul class="space-y-4 text-gray-800 dark:text-gray-100 text-sm">
-    {% for paso in receta.preparacion %}
-    <li class="flex items-start space-x-3">
-      <input type="checkbox" class="h-4 w-4 mt-1 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600" />
-      <span><strong>Paso {{ forloop.counter }}:</strong> {{ paso }}</span>
-    </li>
-    {% endfor %}
-  </ul>
-</div>
-
-
-  </div>
-</div>
-
 {% endblock %}
