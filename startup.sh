@@ -1,23 +1,21 @@
 #!/bin/bash
 
-echo "=== [startup.sh] Iniciando script de arranque ==="
+# Salir si ocurre algún error
+set -e
 
-echo "Paso 1: Migraciones de base de datos"
-python gastrobot/manage.py migrate --noinput || {
-    echo "❌ Error en migrate"
-    exit 1
-}
+# Instalar dependencias de Tailwind
+cd theme
+npm install
+cd ..
 
-echo "Paso 2: Recolectando archivos estáticos"
-python gastrobot/manage.py collectstatic --noinput || {
-    echo "❌ Error en collectstatic"
-    exit 1
-}
+# Compilar Tailwind en modo producción
+python manage.py tailwind build
 
-echo "Paso 3: Lanzando gunicorn..."
-gunicorn gastrobot.wsgi:application --bind=0.0.0.0:8000 --timeout 600 || {
-    echo "❌ Error al iniciar gunicorn"
-    exit 1
-}
+# Recolectar archivos estáticos
+python manage.py collectstatic --noinput
 
-echo "✅ [startup.sh] Servidor iniciado correctamente"
+# Aplicar migraciones
+python manage.py migrate
+
+# Ejecutar servidor Gunicorn
+gunicorn gastrobot.wsgi:application --bind 0.0.0.0:8000
