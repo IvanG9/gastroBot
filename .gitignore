@@ -1,0 +1,9 @@
+# Ignorar entorno virtual
+env/
+venv/
+ENV/
+*.pyc
+__pycache__/
+db.sqlite3
+*.log
+staticfiles/
