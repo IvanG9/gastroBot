@@ -1,9 +1,21 @@
-# Ignorar entorno virtual
+# Entorno virtual
 env/
 venv/
 ENV/
+
+# Archivos de Python
 *.pyc
 __pycache__/
+
+# Base de datos local
 db.sqlite3
-*.log
+
+# Archivos de VSCode
+.vscode/
+
+# Archivos estáticos recolectados
 staticfiles/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
