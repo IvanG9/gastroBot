@@ -16,5 +16,6 @@ urlpatterns = [
   path('favorito/agregar/<int:receta_id>/', views.agregar_favorito, name='agregar_favorito'),
   path('favorito/eliminar/<int:receta_id>/', views.eliminar_favorito, name='eliminar_favorito'),
   path('favoritos/', views.ver_favoritos, name='favoritos'),
+  path("test-openai/", views.test_openai, name="test_openai"),
 
 ]

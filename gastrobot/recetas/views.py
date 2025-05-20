@@ -15,6 +15,9 @@ from .models import Receta, Favorito
 from .forms import RecetaForm
 from asistente.services import ask_groq, generar_imagen_receta
 
+# Test OpenAI
+import openai
+from django.http import JsonResponse
 
 def receta_view(request):
     receta = {...}  # El JSON generado por Groq
@@ -177,3 +180,11 @@ def eliminar_favorito(request, receta_id):
 def ver_favoritos(request):
     recetas = Receta.objects.filter(favoritos__user=request.user).distinct()
     return render(request, 'recetas/ver_favoritos.html', {'recetas': recetas})
+
+def test_openai(request):
+    try:
+        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        response = client.models.list()
+        return JsonResponse({"ok": True, "models": [m.id for m in response.data]})
+    except Exception as e:
+        return JsonResponse({"ok": False, "error": str(e)})
