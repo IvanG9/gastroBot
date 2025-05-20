@@ -18,6 +18,7 @@ from asistente.services import ask_groq, generar_imagen_receta
 # Test OpenAI
 import openai
 from django.http import JsonResponse
+import os
 
 def receta_view(request):
     receta = {...}  # El JSON generado por Groq
