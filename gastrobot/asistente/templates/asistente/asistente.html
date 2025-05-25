@@ -108,4 +108,53 @@
   }
 </script>
 
+<script>
+  const micButton = document.getElementById("mic-button");
+  const micIcon = document.getElementById("mic-icon");
+  const micIndicator = document.getElementById("mic-indicator");
+  const messageTextarea = document.getElementById("message");
+
+  // Comprobamos soporte del navegador
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    micButton.disabled = true;
+    micButton.title = "Tu navegador no soporta reconocimiento de voz";
+  } else {
+    const recognition = new SpeechRecognition();
+    recognition.lang = "es-ES";
+    recognition.interimResults = false;
+    recognition.continuous = false;
+
+    recognition.onstart = () => {
+      micIndicator.classList.remove("hidden");
+      micIcon.textContent = "🛑"; // cambiar a icono de detener
+    };
+
+    recognition.onend = () => {
+      micIndicator.classList.add("hidden");
+      micIcon.textContent = "🎤"; // volver al icono de micro
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Error de reconocimiento:", event.error);
+      alert("Hubo un problema con el reconocimiento de voz.");
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      messageTextarea.value = transcript;
+    };
+
+    micButton.addEventListener("click", () => {
+      try {
+        recognition.start();
+      } catch (err) {
+        console.warn("Ya se está ejecutando:", err.message);
+      }
+    });
+  }
+</script>
+
 {% endblock %}

@@ -12,7 +12,7 @@ def iniciar_sesion(request):
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            return redirect('home')
+            return redirect('dashboard')
     else:
         form = LoginForm()
     return render(request, 'usuarios/login.html', {'form': form})
