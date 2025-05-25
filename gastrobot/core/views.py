@@ -1,4 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from recetas.models import Receta, Favorito
+from usuarios.models import Perfil 
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 def home_view(request):
@@ -27,4 +31,29 @@ def home_view(request):
     return render(request, "core/home.html", {
         "recetas": recetas,
         "planes": planes
+    })
+
+
+def dashboard_view(request):
+    user = request.user
+    recetas_creadas = Receta.objects.filter(autor=user).count()
+    recetas_favoritas = Favorito.objects.filter(user=user).count()
+    ultima_receta = Receta.objects.filter(autor=user).order_by('-fecha_creacion').first()
+
+    perfil = getattr(user, 'perfil', None)
+
+    perfil_completo = (
+        perfil and
+        perfil.nombre and
+        perfil.apellidos and
+        perfil.pais and
+        perfil.imagen and
+        not perfil.imagen.name.endswith('defaults/default_user.png')
+    )
+
+    return render(request, 'core/dashboard.html', {
+        'recetas_creadas': recetas_creadas,
+        'recetas_favoritas': recetas_favoritas,
+        'ultima_receta': ultima_receta,
+        'perfil_completo': perfil_completo,
     })

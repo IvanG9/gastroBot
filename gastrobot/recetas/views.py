@@ -207,3 +207,24 @@ def test_openai(request):
         return JsonResponse({"ok": True, "models": [m.id for m in response.data]})
     except Exception as e:
         return JsonResponse({"ok": False, "error": str(e)})
+    
+@login_required
+def crear_receta(request):
+    if request.method == 'POST':
+        form = RecetaForm(request.POST, request.FILES)
+        ingredientes = request.POST.get('ingredientes', '')
+        pasos = request.POST.get('pasos', '')
+
+        if form.is_valid():
+            receta = form.save(commit=False)
+            receta.autor = request.user
+            receta.ingredientes = ingredientes
+            receta.pasos = pasos
+            receta.save()
+            return redirect('recetas:detalle_receta_guardada', receta_id=receta.id)
+    else:
+        form = RecetaForm()
+
+    return render(request, 'recetas/crear_receta.html', {
+        'form': form,
+    })

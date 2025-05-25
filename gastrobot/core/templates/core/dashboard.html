@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+  <!-- Header section -->
+  <header class="dashboard-header">
+    <h1 class="dashboard-title">
+      <span class="welcome-icon">👋</span>
+      ¡Hola, {{ user.first_name|default:user.username }}!
+    </h1>
+    <p class="dashboard-subtitle">Tu centro de control culinario</p>
+  </header>
+
+  <!-- Stats cards -->
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+  <!-- Recetas creadas -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm 
+              transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="text-3xl">📝</div>
+      <h3 class="text-base font-medium text-gray-700 dark:text-gray-300">
+        Recetas creadas
+      </h3>
+    </div>
+    <div class="text-4xl font-extrabold text-gray-900 dark:text-white leading-none mb-1">
+      {{ recetas_creadas }}
+    </div>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      Tu contribución culinaria
+    </p>
+  </div>
+
+  <!-- Favoritas -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm 
+              transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="text-3xl">❤️</div>
+      <h3 class="text-base font-medium text-gray-700 dark:text-gray-300">
+        Favoritas
+      </h3>
+    </div>
+    <div class="text-4xl font-extrabold text-gray-900 dark:text-white leading-none mb-1">
+      {{ recetas_favoritas }}
+    </div>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      Tus preferidas
+    </p>
+  </div>
+
+  <!-- Última receta -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm 
+              transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="text-3xl">🕒</div>
+      <h3 class="text-base font-medium text-gray-700 dark:text-gray-300">
+        Última receta
+      </h3>
+    </div>
+    <div class="text-lg font-semibold text-gray-900 dark:text-white truncate mb-1">
+      {{ ultima_receta.titulo|default:"Sin actividad" }}
+    </div>
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      {% if ultima_receta %}
+        <a href="{% url 'recetas:detalle_receta_guardada' ultima_receta.id %}" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+          Ver receta
+        </a>
+      {% else %}
+        Sin actividad
+      {% endif %}
+    </p>
+  </div>
+
+  <!-- Perfil -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm 
+              transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="text-3xl">👤</div>
+      <h3 class="text-base font-medium text-gray-700 dark:text-gray-300">
+        Perfil
+      </h3>
+    </div>
+    <div class="text-lg font-semibold mb-1">
+      {% if perfil_completo %}
+        <span class="text-green-600 dark:text-green-400">Completo</span>
+      {% else %}
+        <span class="text-red-500 dark:text-red-400">Incompleto</span>
+      {% endif %}
+    </div>
+    <p class="text-sm">
+      <a href="{% url 'perfil' %}" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+        Actualizar
+      </a>
+    </p>
+  </div>
+  <br>
+</section>
+
+  <!-- Quick actions -->
+  <section class="quick-actions">
+    <h2 class="section-title">Acciones rápidas</h2>
+    <div class="actions-grid">
+      <a href="{% url 'recetas:nueva_receta' %}" class="action-card new-recipe">
+        <span class="action-icon">➕</span>
+        <h3>Nueva Receta</h3>
+        <p>Crea tu propia receta</p>
+      </a>
+      
+      <a href="{% url 'recetas:mis_recetas' %}" class="action-card my-recipes">
+        <span class="action-icon">📚</span>
+        <h3>Mis Recetas</h3>
+        <p>Tus creaciones</p>
+      </a>
+      
+      <a href="{% url 'asistente' %}" class="action-card assistant">
+        <span class="action-icon">🤖</span>
+        <h3>Asistente IA</h3>
+        <p>Inspiración culinaria</p>
+      </a>
+      
+      <a href="{% url 'recetas:explorar_recetas' %}" class="action-card explore">
+        <span class="action-icon">🌍</span>
+        <h3>Explorar</h3>
+        <p>Descubre nuevas ideas</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Featured recipe -->
+  {% if ultima_receta %}
+  <section class="featured-recipe">
+    <h2 class="section-title">Tu última creación</h2>
+    <div class="recipe-card">
+      {% if ultima_receta.imagen %}
+      <div class="recipe-image">
+        <img src="{{ ultima_receta.imagen.url }}" alt="{{ ultima_receta.titulo }}">
+      </div>
+      {% endif %}
+      <div class="recipe-content">
+        <div class="recipe-meta">
+          <span class="recipe-date">{{ ultima_receta.fecha_creacion|date:"d M Y" }}</span>
+          {% if ultima_receta.tiempo_preparacion %}
+          <span class="recipe-time">⏱ {{ ultima_receta.tiempo_preparacion }} min</span>
+          {% endif %}
+        </div>
+        <h3 class="recipe-title">{{ ultima_receta.titulo }}</h3>
+        <p class="recipe-description">{{ ultima_receta.descripcion|truncatewords:30 }}</p>
+        <div class="recipe-actions">
+          <a href="{% url 'recetas:detalle_receta_guardada' ultima_receta.id %}" class="view-recipe">
+            Ver receta completa <span>→</span>
+          </a>
+          <a href="{% url 'recetas:editar_receta' ultima_receta.id %}" class="edit-recipe">
+            Editar
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+</div>
+
+<style>
+  /* Base styles */
+  .dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  /* Header styles */
+  .dashboard-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+
+  .welcome-icon {
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+
+  .dashboard-subtitle {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-bottom: 0;
+  }
+
+
+  .complete {
+    color: #27ae60;
+  }
+
+  .incomplete {
+    color: #e74c3c;
+  }
+
+  /* Quick actions */
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+  }
+
+  .quick-actions {
+    margin-bottom: 3rem;
+  }
+
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .action-card {
+    display: block;
+    background: white;
+    border-radius: 12px;
+    padding: 1.75rem;
+    text-decoration: none;
+    color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  .action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .action-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+
+  .action-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .action-card p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  .new-recipe {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+  }
+
+  .my-recipes {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  }
+
+  .assistant {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+  }
+
+  .explore {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+  }
+
+  /* Featured recipe */
+.recipe-card {
+  display: flex;
+  background: white;
+  color: #2c3e50;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .recipe-card {
+    background: #1e293b; /* gris oscuro (Tailwind slate-800) */
+    color: #f9fafb;       /* texto muy claro */
+  }
+
+  .recipe-card h3,
+  .recipe-card h2,
+  .recipe-card p,
+  .recipe-card a {
+    color: #f9fafb;
+  }
+
+  .recipe-card a:hover {
+    color: #60a5fa; /* azul claro al hacer hover */
+  }
+}
+
+  .recipe-image {
+    flex: 0 0 300px;
+  }
+
+  .recipe-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .recipe-content {
+    flex: 1;
+    padding: 2rem;
+  }
+
+  .recipe-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-bottom: 0.5rem;
+  }
+
+  .recipe-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0 0 1rem 0;
+  }
+
+  .recipe-description {
+    color: #34495e;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .recipe-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .view-recipe {
+    color: #3498db;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .view-recipe span {
+    margin-left: 0.25rem;
+    transition: margin 0.2s;
+  }
+
+  .view-recipe:hover span {
+    margin-left: 0.5rem;
+  }
+
+  .edit-recipe {
+    color: #7f8c8d;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .edit-recipe:hover {
+    color: #3498db;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .dashboard-title {
+      font-size: 2rem;
+    }
+
+    .recipe-card {
+      flex-direction: column;
+    }
+
+    .recipe-image {
+      flex: 0 0 200px;
+    }
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_filters %}
+
+{% block title %}Crear Receta{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 py-8 px-4">
+  <div class="container mx-auto">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="grid md:grid-cols-3 gap-6">
+
+        <!-- 🖼️ Imagen + info -->
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 flex flex-col items-center">
+          <div class="w-full space-y-4">
+
+            <!-- Vista previa -->
+            <div>
+              <label class="block text-sm font-medium mb-2">Imagen actual</label>
+              <div class="rounded-md overflow-hidden border border-gray-300 dark:border-gray-700 shadow mb-4">
+                <img id="preview-imagen" src="{% static 'defaults/default_recipe.jpg' %}" alt="Vista previa" class="w-full h-60 object-cover">
+              </div>
+            </div>
+
+            <!-- Subida de imagen -->
+            <div class="text-center">
+              <label for="id_imagen"
+                     class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 12v9m0-9l3.5 3.5M12 12L8.5 15.5" />
+                </svg>
+                Seleccionar imagen
+              </label>
+              {{ form.imagen|add_class:"hidden" }}
+            </div>
+
+            <!-- Título -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Título</label>
+              {{ form.titulo|add_class:"w-full rounded-md bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 px-3 py-2" }}
+            </div>
+
+            <!-- Descripción -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Descripción</label>
+              {{ form.descripcion|add_class:"w-full rounded-md bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 px-3 py-2" }}
+            </div>
+
+            <!-- Tiempo -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Tiempo de preparación</label>
+              {{ form.tiempo_preparacion|add_class:"w-full rounded-md bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 px-3 py-2" }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Ingredientes -->
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
+          <h2 class="text-lg font-semibold text-purple-700 dark:text-purple-400 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M4 3a1 1 0 011-1h10a1 1 0 011 1v14l-6-3-6 3V3z" />
+            </svg>
+            Ingredientes
+          </h2>
+          <div id="ingredientes-container" class="space-y-2"></div>
+          <button type="button" onclick="agregarIngrediente()" class="mt-2 text-sm text-indigo-600 hover:underline">+ Añadir ingrediente</button>
+          <input type="hidden" name="ingredientes" id="ingredientes-hidden" />
+        </div>
+
+        <!-- Pasos -->
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
+          <h2 class="text-lg font-semibold text-orange-700 dark:text-orange-400 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 3a1 1 0 01.894.553l5 10A1 1 0 0115 15H5a1 1 0 01-.894-1.447l5-10A1 1 0 0110 3z" />
+            </svg>
+            Pasos
+          </h2>
+          <div id="pasos-container" class="space-y-2"></div>
+          <button type="button" onclick="agregarPaso()" class="mt-2 text-sm text-indigo-600 hover:underline">+ Añadir paso</button>
+          <input type="hidden" name="pasos" id="pasos-hidden" />
+        </div>
+      </div>
+
+      <!-- Botón guardar -->
+      <div class="text-center mt-8">
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-semibold shadow transition">
+          📝 Crear receta
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function agregarIngrediente(valor = '') {
+    const container = document.getElementById('ingredientes-container');
+    const div = document.createElement('div');
+    div.className = 'flex items-start gap-2';
+    div.innerHTML = `
+      <input type="checkbox" class="mt-1 accent-purple-600" disabled />
+      <input type="text" name="ingrediente-input" value="${valor}" placeholder="Ej: 1 taza de harina"
+             class="w-full rounded-md bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm" />
+      <button type="button" onclick="this.parentElement.remove()" class="text-red-500 hover:text-red-600">✕</button>`;
+    container.appendChild(div);
+  }
+
+  function agregarPaso(valor = '') {
+    const container = document.getElementById('pasos-container');
+    const div = document.createElement('div');
+    div.className = 'flex items-start gap-2';
+    div.innerHTML = `
+      <input type="checkbox" class="mt-1 accent-orange-600" disabled />
+      <input type="text" name="paso-input" value="${valor}" placeholder="Ej: Mezclar los ingredientes"
+             class="w-full rounded-md bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm" />
+      <button type="button" onclick="this.parentElement.remove()" class="text-red-500 hover:text-red-600">✕</button>`;
+    container.appendChild(div);
+  }
+
+  // Previsualizar imagen
+  document.getElementById("id_imagen").addEventListener("change", function (event) {
+    const [file] = event.target.files;
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById("preview-imagen").src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Serializar ingredientes y pasos
+  document.querySelector('form').addEventListener('submit', function () {
+    const ingredientes = [...document.querySelectorAll('input[name="ingrediente-input"]')]
+      .map(el => el.value.trim()).filter(Boolean);
+    document.getElementById('ingredientes-hidden').value = ingredientes.join(';');
+
+    const pasos = [...document.querySelectorAll('input[name="paso-input"]')]
+      .map(el => el.value.trim()).filter(Boolean);
+    document.getElementById('pasos-hidden').value = pasos.join(';');
+  });
+</script>
+{% endblock %}
