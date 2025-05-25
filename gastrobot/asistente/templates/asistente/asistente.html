@@ -1,14 +1,25 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="max-w-3xl mx-auto p-6 rounded-3xl shadow-xl border border-white/10 backdrop-blur-md bg-white/80 dark:bg-gray-900/60 transition">
-  <h1 class="text-4xl font-extrabold text-center mb-6 text-indigo-700 dark:text-indigo-400 flex items-center justify-center gap-2">
+{% extends 'base.html' %} {% block content %}
+<div
+  class="max-w-3xl mx-auto p-6 rounded-3xl shadow-xl border border-white/10 backdrop-blur-md bg-white/80 dark:bg-gray-900/60 transition"
+>
+  <h1
+    class="text-4xl font-extrabold text-center mb-6 text-indigo-700 dark:text-indigo-400 flex items-center justify-center gap-2"
+  >
     <span>👨‍🍳</span> <span>Asistente de Cocina</span>
   </h1>
 
-  <form method="POST" action="{% url 'recetas:generar_receta' %}" class="space-y-5">
+  <form
+    method="POST"
+    action="{% url 'recetas:generar_receta' %}"
+    class="space-y-5"
+    onsubmit="return mostrarLoader()"
+  >
     {% csrf_token %}
-    
-    <label for="message" class="block text-gray-700 dark:text-gray-200 text-lg font-medium">
+
+    <label
+      for="message"
+      class="block text-gray-700 dark:text-gray-200 text-lg font-medium"
+    >
       ¿Qué quieres cocinar hoy?
     </label>
 
@@ -23,9 +34,9 @@
     <div class="flex justify-between items-center gap-4">
       <button
         type="submit"
-        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg transition shadow-md"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg transition shadow-md flex items-center gap-2"
       >
-        🚀 Generar Receta
+        🚀 <span>Generar Receta</span>
       </button>
 
       <button
@@ -35,77 +46,66 @@
         class="flex items-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition font-medium"
       >
         <span id="mic-icon">🎤</span> <span>Hablar</span>
-        <span id="mic-indicator" class="ml-2 hidden animate-pulse text-red-500">●</span>
+        <span id="mic-indicator" class="ml-2 hidden animate-pulse text-red-500"
+          >●</span
+        >
       </button>
     </div>
   </form>
-
-  {% if loading %}
-    <div class="mt-6 text-center text-gray-600 dark:text-gray-300">
-      <span class="animate-pulse">⏳ Generando receta con amor...</span>
-    </div>
-  {% endif %}
-
-  {% if response %}
-  <div class="mt-6 bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow">
-    <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-3">
-      🍽️ Receta Generada:
-    </h2>
-    <p class="text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed">{{ response }}</p>
-  </div>
-  {% endif %}
 </div>
 
+<!-- Modal loader con pasos -->
+<!-- Loader simple con spinner -->
+<div
+  id="loadingModal"
+  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden"
+>
+  <div
+    class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-2xl w-full max-w-sm text-center"
+  >
+    <div class="flex flex-col items-center gap-4">
+      <svg
+        class="animate-spin h-8 w-8 text-indigo-600"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+        ></path>
+      </svg>
+      <p class="text-lg font-semibold text-gray-800 dark:text-white">
+        Generando receta...
+      </p>
+      <p class="text-sm text-gray-500 dark:text-gray-300">
+        Un momento, estamos cocinando tus ideas 🍳
+      </p>
+    </div>
+  </div>
+</div>
+
+
 <script>
-  let isListening = false;
-  let recognition;
-
-  function createRecognitionInstance() {
-    const recog = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recog.lang = "es-ES";
-    recog.interimResults = true;
-
-    recog.onstart = () => {
-      isListening = true;
-      document.getElementById("mic-indicator").classList.remove("hidden");
-      document.getElementById("mic-button").classList.add("bg-red-600", "text-white");
-      document.getElementById("mic-icon").innerText = "🛑";
-    };
-
-    recog.onresult = (event) => {
-      const transcript = Array.from(event.results)
-        .map((result) => result[0].transcript)
-        .join("");
-      document.getElementById("message").value = transcript;
-      if (event.results[0].isFinal) recog.stop();
-    };
-
-    recog.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-      resetMicUI();
-    };
-
-    recog.onend = () => {
-      resetMicUI();
-    };
-
-    return recog;
-  }
-
-  function toggleVoice() {
-    if (!isListening) {
-      recognition = createRecognitionInstance();
-      recognition.start();
-    } else {
-      recognition?.stop();
+  function mostrarLoader() {
+    const message = document.getElementById("message").value.trim();
+    if (!message) {
+      alert("Por favor describe qué quieres cocinar");
+      return false;
     }
-  }
 
-  function resetMicUI() {
-    isListening = false;
-    document.getElementById("mic-indicator").classList.add("hidden");
-    document.getElementById("mic-button").classList.remove("bg-red-600", "text-white");
-    document.getElementById("mic-icon").innerText = "🎤";
+    document.getElementById("loadingModal").classList.remove("hidden");
+    return true; // permite enviar el formulario
   }
 </script>
+
 {% endblock %}

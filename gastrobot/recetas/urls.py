@@ -18,5 +18,5 @@ urlpatterns = [
   path('favoritos/', views.ver_favoritos, name='favoritos'),
   path("test-openai/", views.test_openai, name="test_openai"),
   path('crear/', views.crear_receta, name='nueva_receta'),
-
+  path('ajax/buscar/', views.buscar_recetas_ajax, name='ajax_buscar_recetas')
 ]

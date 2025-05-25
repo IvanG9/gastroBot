@@ -1,0 +1,12 @@
+{% for receta in recetas %}
+  <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
+    {% if receta.imagen %}
+      <img src="{{ receta.imagen.url }}" class="rounded mb-2 w-full h-40 object-cover" alt="{{ receta.titulo }}">
+    {% endif %}
+    <h2 class="font-semibold text-lg text-gray-900 dark:text-white">{{ receta.titulo }}</h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300">{{ receta.descripcion|truncatewords:20 }}</p>
+    <a href="{% url 'recetas:detalle_receta_guardada' receta.id %}" class="text-blue-600 dark:text-blue-400 hover:underline mt-2 inline-block">Ver receta</a>
+  </div>
+{% empty %}
+  <p class="text-gray-600 dark:text-gray-300 col-span-3">No se encontraron recetas.</p>
+{% endfor %}

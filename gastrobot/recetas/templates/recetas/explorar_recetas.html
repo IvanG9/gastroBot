@@ -1,24 +1,44 @@
-<!-- recetas/explorar.html -->
 {% extends 'base.html' %}
 {% block content %}
 <div class="container mx-auto py-8">
   <h1 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">🍽️ Recetas de la Comunidad</h1>
 
-  {% if recetas %}
-    <div class="grid md:grid-cols-3 gap-6">
-      {% for receta in recetas %}
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow">
-          {% if receta.imagen %}
-            <img src="{{ receta.imagen.url }}" class="rounded mb-2 w-full h-40 object-cover" />
-          {% endif %}
-          <h2 class="font-semibold text-lg text-gray-900 dark:text-white">{{ receta.titulo }}</h2>
-          <p class="text-sm text-gray-600 dark:text-gray-300">{{ receta.descripcion|truncatewords:20 }}</p>
-          <a href="{% url 'recetas:detalle_receta_guardada' receta.id %}" class="text-blue-600 dark:text-blue-400 hover:underline mt-2 inline-block">Ver receta</a>
-        </div>
-      {% endfor %}
+  <!-- Buscador -->
+  <div class="mb-6 max-w-md">
+    <label for="buscador" class="sr-only">Buscar recetas</label>
+    <div class="flex">
+      <input
+        type="text"
+        id="buscador"
+        placeholder="Buscar por título, descripción o ingredientes..."
+        class="w-full rounded-l-md border border-gray-300 dark:border-gray-600 px-4 py-2 focus:outline-none focus:ring focus:border-blue-500 dark:bg-gray-800 dark:text-white"
+      >
+      <span class="bg-blue-600 text-white px-4 py-2 rounded-r-md select-none">🔍</span>
     </div>
-  {% else %}
-    <p class="text-gray-600 dark:text-gray-300">Aún no hay recetas públicas.</p>
-  {% endif %}
+  </div>
+
+  <!-- Resultados -->
+  <div id="resultados" class="grid md:grid-cols-3 gap-6">
+    {% include 'recetas/_recetas_listado.html' %}
+  </div>
 </div>
+
+<!-- Script -->
+<script>
+  let timeout = null;
+  const input = document.getElementById('buscador');
+
+  input.addEventListener('input', function () {
+    clearTimeout(timeout);
+    const query = this.value;
+
+    timeout = setTimeout(() => {
+      fetch(`/recetas/ajax/buscar/?q=` + encodeURIComponent(query))
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('resultados').innerHTML = data.html;
+        });
+    }, 300);
+  });
+</script>
 {% endblock %}

@@ -19,6 +19,8 @@ from asistente.services import ask_groq, generar_imagen_receta
 import openai
 from django.http import JsonResponse
 import os
+from django.db.models import Q
+from django.template.loader import render_to_string
 
 def receta_view(request):
     receta = {...}  # El JSON generado por Groq
@@ -167,7 +169,9 @@ def publicar_receta(request, receta_id):
 @login_required
 def recetas_publicas(request):
     recetas = Receta.objects.filter(publicada=True).order_by('-fecha_publicacion')
-    return render(request, 'recetas/explorar_recetas.html', {'recetas': recetas})
+    return render(request, 'recetas/explorar_recetas.html', {
+        'recetas': recetas
+    })
 
 @login_required
 def despublicar_receta(request, receta_id):
@@ -228,3 +232,25 @@ def crear_receta(request):
     return render(request, 'recetas/crear_receta.html', {
         'form': form,
     })
+
+@login_required
+def explorar_recetas(request):
+    recetas = Receta.objects.filter(publicada=True).order_by('-fecha_publicacion')
+    return render(request, 'recetas/explorar.html', {
+        'recetas': recetas
+    })
+
+@login_required
+def buscar_recetas_ajax(request):
+    q = request.GET.get('q', '')
+    recetas = Receta.objects.filter(publicada=True)
+
+    if q:
+        recetas = recetas.filter(
+            Q(titulo__icontains=q) |
+            Q(descripcion__icontains=q) |
+            Q(ingredientes__icontains=q)
+        )
+
+    html = render_to_string('recetas/_recetas_listado.html', {'recetas': recetas})
+    return JsonResponse({'html': html})
