@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="text-center py-12 px-4 bg-gradient-to-b from-purple-50 to-white dark:from-gray-800 dark:to-gray-900">
+  <h1 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Generador de recetas AI</h1>
+  <p class="text-lg mb-6 max-w-xl mx-auto text-gray-700 dark:text-gray-300">
+    La mejor IA de cocina. Introduce ingredientes y obtén recetas con nuestra IA de recetas.
+  </p>
+  <div class="mt-6">
+    <a href="{% url 'asistente' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition">
+      🚀 Generar Receta
+    </a>
+  </div>
+</section>
+
+<!-- Ejemplos de Recetas -->
+<section class="py-12 px-4 max-w-6xl mx-auto">
+  <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-10">
+    Ejemplo de recetas generadas por nuestra IA alimentaria
+  </h2>
+  <br>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+    {% for receta in recetas %}
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition">
+        <img src="{{ receta.imagen_url }}" alt="{{ receta.nombre }}" class="w-full h-48 object-cover rounded-t-lg" />
+        <div class="p-4">
+          <h3 class="font-bold text-lg text-gray-900 dark:text-white">{{ receta.nombre }}</h3>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ¿Cómo funciona? -->
+<section class="py-12 px-4 bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-12 tracking-tight">
+      ¿Cómo funciona?
+    </h2>
+    <br>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Paso 1 -->
+      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow p-6">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">1. Introduce un prompt</h3>
+        <p class="text-gray-700 dark:text-gray-300 text-sm">
+          Escribe una idea o ingredientes que tengas a mano. También puedes indicar preferencias como vegano, sin gluten, etc.
+        </p>
+      </div>
+      <!-- Paso 2 -->
+      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow p-6">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">2. Genera una receta</h3>
+        <p class="text-gray-700 dark:text-gray-300 text-sm">
+          La IA generará una receta personalizada en segundos, lista para cocinar.
+        </p>
+      </div>
+      <!-- Paso 3 -->
+      <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow p-6">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">3. Disfruta de la comida</h3>
+        <p class="text-gray-700 dark:text-gray-300 text-sm">
+          Guarda, cocina y comparte tus recetas. Todo desde un solo lugar.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Planes -->
+<section class="py-12 px-4 max-w-6xl mx-auto">
+  <h2 class="text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-12 tracking-tight">
+    Encuentra el plan perfecto para ti
+  </h2>
+  <br>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+    {% for plan in planes %}
+      <div class="flex flex-col justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow p-6">
+        <div>
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">{{ plan.nombre }}</h3>
+          {% if plan.nombre == "Gratis" %}
+            <p class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-6">
+              €0<span class="text-base font-normal text-gray-500 dark:text-gray-400"> /mes</span>
+            </p>
+          {% elif plan.nombre == "Plus" %}
+            <p class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-6">
+              €5<span class="text-base font-normal text-gray-500 dark:text-gray-400"> /mes</span>
+            </p>
+          {% elif plan.nombre == "Pro" %}
+            <p class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-6">
+              €12<span class="text-base font-normal text-gray-500 dark:text-gray-400"> /mes</span>
+            </p>
+          {% endif %}
+
+          <ul class="space-y-3">
+            {% for beneficio in plan.beneficios %}
+              <li class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-indigo-500 shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" />
+                </svg>
+                <span class="text-gray-700 dark:text-gray-300">{{ beneficio }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="mt-6">
+          <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-lg transition">
+            Elegir plan
+          </button>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- CTA Final -->
+<section class="text-center py-12 px-4 bg-indigo-50 dark:bg-gray-900">
+  <h2 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
+    Descubre el mejor generador de recetas gratis
+  </h2>
+  <p class="mb-6 max-w-xl mx-auto text-gray-700 dark:text-gray-300">
+    Desbloquea recetas personalizadas, reduce el desperdicio alimentario y mejora tus habilidades culinarias.
+  </p>
+  <div class="mt-6">
+    <a href="{% url 'asistente' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition">
+      🚀 Empieza ahora
+    </a>
+  </div>
+</section>
+
+{% endblock %}

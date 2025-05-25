@@ -24,18 +24,12 @@
 
             <!-- Enlaces -->
             <div class="hidden md:flex space-x-6 text-sm font-medium">
-              <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">Dashboard</a>
+              <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">Home</a>
               <a href="{% url 'recetas:mis_recetas' %}" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">Mis Recetas</a>
               <a href="{% url 'recetas:favoritos' %}" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">⭐ Favoritos</a>
               <a href="{% url 'asistente' %}" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">Asistente</a>
               <a href="{% url 'recetas:explorar_recetas' %}" class="text-gray-700 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 transition">🌍 Explorar</a>
             </div>
-
-            <!-- Botón de modo oscuro -->
-            <button id="dark-mode-toggle" title="Cambiar modo"
-              class="text-sm px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition">
-              <span id="dark-mode-icon">🌙</span>
-            </button>
 
             <!-- Login/Usuario -->
             <div class="flex items-center space-x-4 text-sm">
@@ -65,16 +59,6 @@
         </div>
       </nav>
 
-      <!-- Header 
-        <header class="bg-white dark:bg-gray-800 shadow-sm">
-          <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
-              {% block header %}{% endblock %}
-            </h1>
-          </div>
-        </header>
-      -->
-
       <!-- Main Content -->
       <main>
         <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 space-y-6">
@@ -82,29 +66,5 @@
         </div>
       </main>
     </div>
-
-    <!-- Script modo oscuro -->
-    <script>
-      const htmlEl = document.documentElement;
-      const toggleBtn = document.getElementById('dark-mode-toggle');
-      const iconEl = document.getElementById('dark-mode-icon');
-
-      // Inicial
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        htmlEl.classList.add('dark');
-        if (iconEl) iconEl.textContent = '☀️';
-      } else {
-        htmlEl.classList.remove('dark');
-        if (iconEl) iconEl.textContent = '🌙';
-      }
-
-      // Cambio
-      toggleBtn?.addEventListener('click', () => {
-        htmlEl.classList.toggle('dark');
-        const isDark = htmlEl.classList.contains('dark');
-        localStorage.theme = isDark ? 'dark' : 'light';
-        if (iconEl) iconEl.textContent = isDark ? '☀️' : '🌙';
-      });
-    </script>
   </body>
 </html>
