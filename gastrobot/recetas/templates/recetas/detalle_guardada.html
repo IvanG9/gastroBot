@@ -1,121 +1,121 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 py-8 px-4">
-  <div class="container mx-auto">
-    <div class="grid md:grid-cols-3 gap-6">
+  {% extends 'base.html' %}
+  {% block content %}
+  <div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 py-8 px-4">
+    <div class="container mx-auto">
+      <div class="grid md:grid-cols-3 gap-6">
 
-      <!-- 📷 Imagen + Información -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 flex flex-col items-center">
-        {% if receta.imagen %}
-        <img
-          src="{{ receta.imagen.url }}"
-          alt="{{ receta.titulo }}"
-          class="rounded-md mb-4 w-full h-auto object-cover shadow"
-        />
-        {% endif %}
-        <h1 class="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">
-          {{ receta.titulo }}
-        </h1>
-        <p class="text-center text-gray-700 dark:text-gray-300 mb-2">{{ receta.descripcion }}</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400">Tiempo: {{ receta.tiempo_preparacion }}</p>
-
-       <div class="mt-6 flex flex-wrap justify-center gap-4">
-
-        {% if user.is_authenticated and receta.autor == user %}
-
-          <!-- Botón Editar -->
-          <a href="{% url 'recetas:editar_receta' receta.id %}"
-            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition duration-150">
-            ✏️ Editar
-          </a>
-
-          <!-- Botón Eliminar -->
-          <a href="{% url 'recetas:eliminar_receta' receta.id %}"
-            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow transition duration-150">
-            🗑️ Eliminar
-          </a>
-
-        {% endif %}
-        <!-- Botón Publicar -->
-        {% if request.user.is_authenticated and receta.autor.id == request.user.id and not receta.publicada %}
-          <form method="POST" action="{% url 'recetas:publicar_receta' receta.id %}">
-            {% csrf_token %}
-            <button type="submit"
-                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow transition duration-150">
-              🌍 Publicar
-            </button>
-          </form>
-        {% endif %}
-
-        <!-- Botón Despublicar -->
-        {% if request.user.is_authenticated and receta.autor.id == request.user.id and receta.publicada %}
-          <form method="POST" action="{% url 'recetas:despublicar_receta' receta.id %}">
-            {% csrf_token %}
-            <button type="submit"
-                    class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow transition duration-150">
-              🔒 Despublicar
-            </button>
-          </form>
-        {% endif %}
-            
-        {% if user.is_authenticated %}
-          {% if es_favorita %}
-            <a href="{% url 'recetas:eliminar_favorito' receta.id %}"
-              class="text-red-600 hover:underline">💔 Quitar de favoritos</a>
-          {% else %}
-            <a href="{% url 'recetas:agregar_favorito' receta.id %}"
-              class="text-green-600 hover:underline">❤️ Añadir a favoritos</a>
+        <!-- 📷 Imagen + Información -->
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6 flex flex-col items-center">
+          {% if receta.imagen %}
+          <img
+            src="{{ receta.imagen.url }}"
+            alt="{{ receta.titulo }}"
+            class="rounded-md mb-4 w-full h-auto object-cover shadow"
+          />
           {% endif %}
-        {% endif %}
+          <h1 class="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-white">
+            {{ receta.titulo }}
+          </h1>
+          <p class="text-center text-gray-700 dark:text-gray-300 mb-2">{{ receta.descripcion }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Tiempo: {{ receta.tiempo_preparacion }}</p>
+
+        <div class="mt-6 flex flex-wrap justify-center gap-4">
+
+          {% if user.is_authenticated and receta.autor == user %}
+
+            <!-- Botón Editar -->
+            <a href="{% url 'recetas:editar_receta' receta.id %}"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition duration-150">
+              ✏️ Editar
+            </a>
+
+            <!-- Botón Eliminar -->
+            <a href="{% url 'recetas:eliminar_receta' receta.id %}"
+              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow transition duration-150">
+              🗑️ Eliminar
+            </a>
+
+          {% endif %}
+          <!-- Botón Publicar -->
+          {% if request.user.is_authenticated and receta.autor.id == request.user.id and not receta.publicada %}
+            <form method="POST" action="{% url 'recetas:publicar_receta' receta.id %}">
+              {% csrf_token %}
+              <button type="submit"
+                      class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow transition duration-150">
+                🌍 Publicar
+              </button>
+            </form>
+          {% endif %}
+
+          <!-- Botón Despublicar -->
+          {% if request.user.is_authenticated and receta.autor.id == request.user.id and receta.publicada %}
+            <form method="POST" action="{% url 'recetas:despublicar_receta' receta.id %}">
+              {% csrf_token %}
+              <button type="submit"
+                      class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow transition duration-150">
+                🔒 Despublicar
+              </button>
+            </form>
+          {% endif %}
+              
+          {% if user.is_authenticated %}
+            {% if es_favorita %}
+              <a href="{% url 'recetas:eliminar_favorito' receta.id %}"
+                class="text-red-600 hover:underline">💔 Quitar de favoritos</a>
+            {% else %}
+              <a href="{% url 'recetas:agregar_favorito' receta.id %}"
+                class="text-green-600 hover:underline">❤️ Añadir a favoritos</a>
+            {% endif %}
+          {% endif %}
 
 
-      </div>
+        </div>
+        </div>
+
+        <!-- 🧂 Ingredientes -->
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
+          <h2 class="text-lg font-semibold text-purple-700 dark:text-purple-400 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M4 3a1 1 0 011-1h10a1 1 0 011 1v14l-6-3-6 3V3z" />
+            </svg>
+            Ingredientes
+          </h2>
+          <ul class="space-y-2">
+            {% for ingrediente in ingredientes %}
+            <li class="flex items-start">
+              <input type="checkbox" class="mt-1 mr-2 accent-purple-600" />
+              <span>{{ ingrediente }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- 👨‍🍳 Pasos -->
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
+          <h2 class="text-lg font-semibold text-orange-700 dark:text-orange-400 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 3a1 1 0 01.894.553l5 10A1 1 0 0115 15H5a1 1 0 01-.894-1.447l5-10A1 1 0 0110 3z"/>
+            </svg>
+            Pasos
+          </h2>
+          <ul class="space-y-4">
+            {% for paso in pasos %}
+            <li class="flex items-start">
+              <input type="checkbox" class="mt-1 mr-2 accent-orange-600" />
+              <span><strong>Paso {{ forloop.counter }}:</strong> {{ paso }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
 
-      <!-- 🧂 Ingredientes -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
-        <h2 class="text-lg font-semibold text-purple-700 dark:text-purple-400 mb-4 flex items-center">
-          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M4 3a1 1 0 011-1h10a1 1 0 011 1v14l-6-3-6 3V3z" />
-          </svg>
-          Ingredientes
-        </h2>
-        <ul class="space-y-2">
-          {% for ingrediente in ingredientes %}
-          <li class="flex items-start">
-            <input type="checkbox" class="mt-1 mr-2 accent-purple-600" />
-            <span>{{ ingrediente }}</span>
-          </li>
-          {% endfor %}
-        </ul>
+      <!-- 🔙 Botón volver -->
+      <div class="text-center mt-8">
+        <a href="{% url 'recetas:mis_recetas' %}" class="text-blue-600 hover:underline">
+          ← Volver a Mis Recetas
+        </a>
       </div>
 
-      <!-- 👨‍🍳 Pasos -->
-      <div class="bg-white dark:bg-gray-800 shadow-md rounded-xl p-6">
-        <h2 class="text-lg font-semibold text-orange-700 dark:text-orange-400 mb-4 flex items-center">
-          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 3a1 1 0 01.894.553l5 10A1 1 0 0115 15H5a1 1 0 01-.894-1.447l5-10A1 1 0 0110 3z"/>
-          </svg>
-          Pasos
-        </h2>
-        <ul class="space-y-4">
-          {% for paso in pasos %}
-          <li class="flex items-start">
-            <input type="checkbox" class="mt-1 mr-2 accent-orange-600" />
-            <span><strong>Paso {{ forloop.counter }}:</strong> {{ paso }}</span>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
     </div>
-
-    <!-- 🔙 Botón volver -->
-    <div class="text-center mt-8">
-      <a href="{% url 'recetas:mis_recetas' %}" class="text-blue-600 hover:underline">
-        ← Volver a Mis Recetas
-      </a>
-    </div>
-
   </div>
-</div>
-{% endblock %}
+  {% endblock %}

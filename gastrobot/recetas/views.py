@@ -110,13 +110,31 @@ def editar_receta_view(request, receta_id):
 
     if request.method == 'POST':
         form = RecetaForm(request.POST, request.FILES, instance=receta)
+
+        ingredientes = request.POST.get('ingredientes', '')
+        pasos = request.POST.get('pasos', '')
+
         if form.is_valid():
-            form.save()
+            receta = form.save(commit=False)
+            receta.ingredientes = ingredientes
+            receta.pasos = pasos
+            receta.save()
             return redirect('recetas:detalle_receta_guardada', receta_id=receta.id)
     else:
         form = RecetaForm(instance=receta)
 
-    return render(request, 'recetas/editar_receta.html', {'form': form, 'receta': receta})
+    ingredientes_lista = [i.strip() for i in receta.ingredientes.split(';')] if receta.ingredientes else []
+    pasos_lista = [p.strip() for p in receta.pasos.split(';')] if receta.pasos else []
+
+    return render(request, 'recetas/editar_receta.html', {
+        'form': form,
+        'receta': receta,
+        'ingredientes_lista': ingredientes_lista,
+        'pasos_lista': pasos_lista,
+        'ingredientes': ingredientes_lista,
+        'pasos': pasos_lista,
+    })
+
 
 @login_required
 def eliminar_receta_view(request, receta_id):
