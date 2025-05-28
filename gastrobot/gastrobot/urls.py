@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),  # página principal
     path('usuarios/', include('usuarios.urls')),  # login, registro, logout
-    path('recetas/', include('recetas.urls')),    # dashboard
+    path('recetas/', include('recetas.urls')),    # recetas
     path('asistente/', include('asistente.urls')), # chatbot
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
